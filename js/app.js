@@ -45,7 +45,7 @@
   app.controller('graphCtrl',function($scope){
     $scope.selectSql = function(sql_state,callback){
       var items = new Array();
-      
+
       db.transaction(
         function(trans){
           trans.executeSql(
@@ -53,7 +53,7 @@
               function(trans,r){
                 // console.log(r.rows)
                 // sql_result.t_data = r.rows;
-                
+
                 for(var i=0;i<r.rows.length;i++){
                   items.push(r.rows.item(i));
                 }
@@ -64,9 +64,13 @@
           )
         }
       )
-      // 
+      //
     };
     $scope.showGraph = function(){
+      if(!$scope.graph_date){
+        alert("please input a date!");
+        return
+      }
       var table_name = "t_data_table"
       var year = $scope.graph_date.getFullYear()
       var month = $scope.graph_date.getMonth()+1
@@ -74,89 +78,109 @@
 
       // Create label
       var label = []
-      var push_ups=[]
-      var crunch=[]
+      var graph_data_dict = {}
+      $.each(t_list,function(index,val){
+        if(val=="Plank" || val=="Running"){
+          return true;
+        }
+        graph_data_dict[val]=[]
+      })
       for(var i=1;i<32;i++){
         label.push(year+" / "+month+" / "+i);
-        push_ups.push(0);
-        crunch.push(0);
+        $.each(graph_data_dict,function(key){
+          graph_data_dict[key].push(0);
+        })
       }
+      console.log(graph_data_dict)
 
       //Create data
       console.log(label);
       $scope.selectSql(sql_state,function(){
         //Create data
         $.each($scope.graph_data_list,function(index,val){
-          if(val.t_name=="Push_ups"){
-            push_ups[val.date-1]=val.count;
-          }else if(val.t_name=="Crunch"){
-            crunch[val.date-1]=val.count;
-          }
+          graph_data_dict[val.t_name][val.date-1]=val.count;
         })
         console.log($scope.graph_data_list);
         var ctx_push = document.getElementById("myPushChart").getContext("2d");
         var ctx_crunch = document.getElementById("myCrunchChart").getContext("2d");
         ctx_push.canvas.width = 600;
-        ctx_push.canvas.height = 100;
+        ctx_push.canvas.height = 200;
         ctx_crunch.canvas.width = 600;
-        ctx_crunch.canvas.height = 100; 
+        ctx_crunch.canvas.height = 100;
+        var datasets = []
+        var backgroundColor = [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 159, 64, 0.6)'
+        ]
+        var borderColor =  [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ]
+        var i = 0;
+        $.each(graph_data_dict,function(key){
+          datasets.push({
+            label:key,
+            backgroundColor:backgroundColor[i],
+            borderColor:borderColor[i],
+            data: graph_data_dict[key],
+          })
+          i += 1
+        })
 
         // var type = "line"
         var type = "bar"
         var push_ups_data = {
             labels: label,
-            datasets: [
-                {
-                    label: "Push_ups",
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: "rgba(75,192,192,0.4)",
-                    borderColor: "rgba(75,192,192,1)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(75,192,192,1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                    pointHoverBorderColor: "rgba(220,220,220,1)",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: push_ups,
-                    spanGaps: false,
-                }
-            ]
+            datasets:datasets,
+            // datasets: [
+            //     {
+            //         label: "Push_ups",
+            //         backgroundColor: "rgba(75,192,192,0.6)",
+            //         borderColor: "rgba(75,192,192,1)",
+            //         data: graph_data_dict["Push_ups"],
+            //     },{
+            //         label: "Crunch",
+            //         backgroundColor: "rgba(255, 99, 132, 0.6)",
+            //         borderColor: "rgba(255,99,132,1)",
+            //         data: graph_data_dict["Crunch"],
+            //     }
+            // ]
         };
-        var crunch_data = {
-            labels: label,
-            datasets: [
-                {
-                    label: "Crunch",
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: "rgba(255, 99, 132, 0.4)",
-                    borderColor: "rgba(255,99,132,1)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(255,99,132,1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(255, 99, 132, 0.4)",
-                    pointHoverBorderColor: "rgba(255,99,132,1)",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: crunch,
-                    spanGaps: false,
-                }
-            ]
-        };
+        // var crunch_data = {
+        //     labels: label,
+        //     datasets: [
+        //         {
+        //             label: "Crunch",
+        //             fill: false,
+        //             lineTension: 0.1,
+        //             backgroundColor: "rgba(255, 99, 132, 0.6)",
+        //             borderColor: "rgba(255,99,132,1)",
+        //             borderCapStyle: 'butt',
+        //             borderDash: [],
+        //             borderDashOffset: 0.0,
+        //             borderJoinStyle: 'miter',
+        //             pointBorderColor: "rgba(255,99,132,1)",
+        //             pointBackgroundColor: "#fff",
+        //             pointBorderWidth: 1,
+        //             pointHoverRadius: 5,
+        //             pointHoverBackgroundColor: "rgba(255, 99, 132, 0.4)",
+        //             pointHoverBorderColor: "rgba(255,99,132,1)",
+        //             pointHoverBorderWidth: 2,
+        //             pointRadius: 1,
+        //             pointHitRadius: 10,
+        //             data: crunch,
+        //             spanGaps: false,
+        //         }
+        //     ]
+        // };
         // var data = {
         //         labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
         //         datasets: [{
@@ -194,19 +218,19 @@
                 }
             }
         });
-        var myCrunchChart = new Chart(ctx_crunch, {
-            type: type,
-            data: crunch_data,
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
+        // var myCrunchChart = new Chart(ctx_crunch, {
+        //     type: type,
+        //     data: crunch_data,
+        //     options: {
+        //         scales: {
+        //             yAxes: [{
+        //                 ticks: {
+        //                     beginAtZero:true
+        //                 }
+        //             }]
+        //         }
+        //     }
+        // });
       });
     }
   });
@@ -234,7 +258,7 @@
       console.log(t)
       var table_name = "t_data_table"
       var items = new Array();
-      
+
       db.transaction(
         function(trans){
           trans.executeSql(
@@ -242,7 +266,7 @@
               function(trans,r){
                 // console.log(r.rows)
                 // sql_result.t_data = r.rows;
-                
+
                 for(var i=0;i<r.rows.length;i++){
                   items.push(r.rows.item(i));
                 }
@@ -253,7 +277,7 @@
           )
         }
       )
-      // 
+      //
     };
     $scope.removeData = function(t_name){
       var table_name = "t_data_table"

@@ -18,6 +18,7 @@
   <body ng-controller="appCtrl">
     <!-- <div sample-directive></div> -->
     <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Training Recorder</a>
         <ul class="nav navbar-nav">
             <li ng-class="{active: active_tab=='home'}" class="nav-item">
               <a class="nav-link" href="#" ng-click="setTab('home')">Home <span class="sr-only">(current)</span></a>
@@ -59,11 +60,11 @@
         </div>
 
         <div ng-show="active_tab== 'training'" ng-controller="trainingCtrl">
-            <ul class="list-styled">
-              <li>月と日付を選択してその日の情報を表示</li>
-              <li>追加ボタンを押すことで行を追加</li>
-              <li>削除を押せばその行を削除できる．</li>
-            </ul>
+            <ol class="list-styled">
+              <li>Select date and show info. of the date. </li>
+              <li>Select training menu and input a count.</li>
+              <li>You can remove a training data by pushing the remove button of the training row.</li>
+            </ol>
             <div class="form-group row">
               <label for="example-date-input" class="col-xs-2 col-form-label">Date</label>
               <div class="col-xs-7">
@@ -114,20 +115,35 @@
         </div>
 
         <div ng-show="active_tab== 'about'">
-            <p>簡単なトレーニング記録ツール</p>
-            <p>ブラウザベースでローカルストレージに記録する</p>
+            <p>Simple Recording tool for athletic trainings</p>
+            <p>It's Browser base and save data in local env. by using WebSQL.</p>
         </div>
         <div ng-show="active_tab == 'setting'" ng-controller="settingCtrl">
-            <div class="col-sm-3">Creating Database</div>
-            <div class="col-sm-3">
-                <select class="form-control" ng-model="selected_t" ng-options="t for t in t_list">
-                </select>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                <label class="control-label">Creating Database</label>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" ng-model="selected_t" ng-options="t for t in t_list">
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <button type="button" class="btn btn-primary btn-block" ng-click="createTable()">Create New Table</button>
+                </div>
+                <div class="col-sm-3">
+                    <button type="button" class="btn btn-primary btn-block" ng-click="removeTable()">Remove Table</button>
+                </div>
             </div>
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-primary btn-block" ng-click="createTable()">Create New Table</button>
-            </div>
-            <div class="col-sm-3">
-                <button type="button" class="btn btn-primary btn-block" ng-click="removeTable()">Remove Table</button>
+            <div class="form-group row" style="margin:30px">
+                <div class="col-sm-4">
+                    <label class="col-form-label">Base Color</label>
+                </div>
+                <div class="col-sm-4">
+                    <input type="color" ng-model="base_color">
+                </div>
+                <div class="col-sm-4">
+
+                </div>
             </div>
         </div>
   </body>
