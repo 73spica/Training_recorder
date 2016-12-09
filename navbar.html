@@ -1,0 +1,19 @@
+<nav class="navbar navbar-dark bg-primary">
+  <ul class="nav navbar-nav">
+    <li ng-class="{active: active_tab=='home'}" class="nav-item">
+      <a class="nav-link" href="#" ng-click="setTab('home')">Home <span class="sr-only">(current)</span></a>
+    </li>
+    <li ng-class="{active: active_tab=='graph'}" class="nav-item">
+      <a class="nav-link" href="#" ng-click="setTab('graph')">Graph</a>
+    </li>
+    <li ng-class="{active: active_tab=='training'}" class="nav-item">
+      <a class="nav-link" href="#" ng-click="setTab('training')">Training</a>
+    </li>
+    <li ng-class="{active: active_tab=='about'}" class="nav-item">
+      <a class="nav-link" href="#" ng-click="setTab('about')">About</a>
+    </li>
+    <li ng-class="{active: active_tab=='setting'}" class="nav-item">
+      <a class="nav-link" href="#" ng-click="setTab('setting')">Setting</a>
+    </li>
+  </ul>
+</nav>
