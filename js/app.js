@@ -289,6 +289,7 @@
           trans.executeSql(
             'DELETE FROM '+table_name+' WHERE date='+date+' AND year='+year+' AND month='+month+' AND t_name="'+t_name+'";'
           )
+          delete $scope.t_data_list[t_name];
         }
       )
     }
@@ -302,6 +303,7 @@
           var i = state.parent().parent().index()
           state.parent().parent().remove();
           $scope.removeData(t[i].t_name);
+          $scope.t_data_list.splice(i,1) ;
         }else{
           // var i = state.parent().parent().index()
           // console.log(t[i].t_name);
@@ -343,6 +345,8 @@
             +','
             +count+');'
           )
+          $scope.t_data_list.push({"t_name":t_name,"count":count})
+          $scope.$apply()
         }
       )
     };
