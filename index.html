@@ -82,6 +82,8 @@
                             <th>#</th>
                             <th>kind_of_Training</th>
                             <th>Counts</th>
+                            <th>Add Count</th>
+                            <th>Add</th>
                             <th>Remove</th>
                         </tr>
                     </thead>
@@ -90,6 +92,8 @@
                             <td>{{$index}}</td>
                             <td>{{t_data.t_name}}</td>
                             <td>{{t_data.count}}</td>
+                            <td><input class="form-control add" type="number" placeholder="count"></td>
+                            <td><button type="button" class="btn btn-primary updateData">Add</button></td>
                             <td><button type="button" class="btn btn-danger removeForm">Remove</button></td>
                         </tr>
                     </tbody>

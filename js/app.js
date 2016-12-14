@@ -26,6 +26,20 @@
     return openDatabase(dbName, version, displayName, estimatedSize);
   }
 
+  //sql文の実行
+  //最初に色々書いたところもこれ使いたい
+  function do_sql(sql_state,callback=0){
+    db.transaction(
+        function(trans){
+          trans.executeSql(
+            sql_state
+          )
+          if(callback!=0){
+            callback();
+          }
+        }
+      )
+  }
   // ==== Using LocalStorage ====
 
   //Controllerの設定をしています。
@@ -350,6 +364,32 @@
         }
       )
     };
+    $(document).on("click",".updateData",function(){
+      var state = $(this)
+      var add_count = Number(state.parent().parent().children().eq(3).children(".add").val())
+      if(!add_count){
+        alert("please input add_count.");
+        return
+      }
+      var pre_count = Number(state.parent().parent().children().eq(2).text())
+      var t_name = state.parent().parent().children().eq(1).text()
+      var date = $scope.date;
+      var year = $scope.year;
+      var month = $scope.month;
+      var table_name = "t_data_table"
+      var i = state.parent().parent().index()
+      var count = add_count+pre_count
+      var sql_state = "UPDATE "+table_name+" SET count="+count+" WHERE date="+date+" AND month="+month+" AND year="+year+" AND t_name='"+t_name+"';"
+      console.log(sql_state)
+      do_sql(sql_state,function(){
+        $scope.t_data_list[i].count = count;
+        $scope.$apply()
+      });
+    })
+    // $scope.updateData = function(){
+    //   var state = $(this)
+    //   console.log(state.eq(1));
+    // }
     // $scope.createForm = function(t){
     //   $scope.form_num += 1;
     //   var insert = '<div id="'+t.toLowerCase()+'" class="form-group row">'
