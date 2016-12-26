@@ -11,6 +11,7 @@ _Creating now_
 
 ## Requirements
 * It's needed __only browser__. It's used following:
+
 ** Database : WebSQL
 ** JavaScript : AngularJS1
 ** CSS : Bootstrap (and self-made one)
