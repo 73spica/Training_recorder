@@ -10,9 +10,8 @@ _Creating now_
 ![demo](https://github.com/73spica/Training_recorder/blob/master/demo/demo.gif)
 
 ## Requirements
-* It's needed __only browser__. It's used following:
-
-** Database : WebSQL
-** JavaScript : AngularJS1
-** CSS : Bootstrap (and self-made one)
-** Graph : Chart.js
+It's needed __only browser__. It's used following:
+* Database : WebSQL
+* JavaScript : AngularJS1
+* CSS : Bootstrap (and self-made one)
+* Graph : Chart.js
