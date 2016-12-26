@@ -7,7 +7,7 @@ _Creating now_
 
 ## Demo
 
-![demo](https://github.com/ajasmin/camstudio-mousedown-highlight/raw/master/android_vid_test.gif)
+![demo](https://github.com/73spica/Training_recorder/blob/master/demo/demo.gif)
 
 ## Requirements
 * It's needed __only browser__. It's used following:
