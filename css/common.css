@@ -1,0 +1,13 @@
+strong.marker {
+    background: linear-gradient(transparent 60%, #ff99ff 60%);
+}
+
+div.title{
+    width: 50%;
+    min-width: 250px;
+    max-width: 300px;
+    padding: 0.5px 0.2em;
+    border-bottom: 2px solid #888;
+    font-size: 130％;
+    font-weight: bold;
+}

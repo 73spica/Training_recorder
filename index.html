@@ -2,6 +2,7 @@
 <html ng-app="trainingApp">
   <head>
     <meta charset="utf-8">
+    <link type="text/css" href="css/common.css" rel="stylesheet">
     <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript"></script>
@@ -39,9 +40,12 @@
     </nav>
     <div style="margin:30px">
         <div ng-show="active_tab == 'home'">
-          <p><input type="text" class="form-control"></p>
-          <p>Hello!</p>
-          <div></div>
+            <p>Welcome!</p>
+            <div class="h1 title">About</div>
+            <ul class="list-styled">
+                <li>This is <strong class="marker">Simple Recording tool</strong> for athletic trainings.</li>
+                <li>It's Browser base and save data in local env. by using WebSQL.</li>
+            </ul>
         </div>
         <div ng-show="active_tab == 'graph'" ng-controller="graphCtrl">
              <div class="form-group row" style="margin:30px">
@@ -116,11 +120,6 @@
             </div>
             <div id="trainings">
             </div>
-        </div>
-
-        <div ng-show="active_tab== 'about'">
-            <p>Simple Recording tool for athletic trainings</p>
-            <p>It's Browser base and save data in local env. by using WebSQL.</p>
         </div>
         <div ng-show="active_tab == 'setting'" ng-controller="settingCtrl">
             <div class="form-group row">
