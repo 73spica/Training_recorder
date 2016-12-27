@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link type="text/css" href="css/common.css" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
     <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript"></script>
@@ -19,6 +20,7 @@
   <body ng-controller="appCtrl">
     <!-- <div sample-directive></div> -->
     <nav class="navbar navbar-dark bg-primary">
+    <!-- <nav class="navbar navbar-default"> -->
         <a class="navbar-brand" href="#">Training Recorder</a>
         <ul class="nav navbar-nav">
             <li ng-class="{active: active_tab=='home'}" class="nav-item">
@@ -29,9 +31,6 @@
             </li>
             <li ng-class="{active: active_tab=='training'}" class="nav-item">
               <a class="nav-link" href="#" ng-click="setTab('training')">Training</a>
-            </li>
-            <li ng-class="{active: active_tab=='about'}" class="nav-item">
-              <a class="nav-link" href="#" ng-click="setTab('about')">About</a>
             </li>
             <li ng-class="{active: active_tab=='setting'}" class="nav-item">
               <a class="nav-link" href="#" ng-click="setTab('setting')">Setting</a>
@@ -45,6 +44,14 @@
             <ul class="list-styled">
                 <li>This is <strong class="marker">Simple Recording tool</strong> for athletic trainings.</li>
                 <li>It's Browser base and save data in local env. by using WebSQL.</li>
+            </ul>
+            <div class="h1 title">Requirements</div>
+            <ul class="list-styled">
+                <p>It's needed <strong class="marker">only browser</strong> .It's used following:</p>
+                <li>Database :<strong>WebSQL (Goole Chrome)</strong></li>
+                <li>JavaScript : <strong>AngularJS1</strong></li>
+                <li>CSS : <strong>Bootstrap (and self-made one)</strong></li>
+                <li>Graph : <strong>Chart.js</strong></li>
             </ul>
         </div>
         <div ng-show="active_tab == 'graph'" ng-controller="graphCtrl">
@@ -122,22 +129,22 @@
             </div>
         </div>
         <div ng-show="active_tab == 'setting'" ng-controller="settingCtrl">
-            <div class="form-group row">
-                <div class="col-sm-3">
+            <div class="form-group row set-row">
+                <div class="col-sm-4">
                 <label class="control-label">Creating Database</label>
                 </div>
-                <div class="col-sm-3">
+                <!-- <div class="col-sm-3">
                     <select class="form-control" ng-model="selected_t" ng-options="t for t in t_list">
                     </select>
-                </div>
-                <div class="col-sm-3">
+                </div> -->
+                <div class="col-sm-4">
                     <button type="button" class="btn btn-primary btn-block" ng-click="createTable()">Create New Table</button>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <button type="button" class="btn btn-primary btn-block" ng-click="removeTable()">Remove Table</button>
                 </div>
             </div>
-            <div class="form-group row" style="margin:30px">
+            <div class="form-group row set-row">
                 <div class="col-sm-4">
                     <label class="col-form-label">Base Color</label>
                 </div>

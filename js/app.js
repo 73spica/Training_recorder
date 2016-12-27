@@ -41,11 +41,28 @@
   }
   // ==== Using LocalStorage ====
 
-  app.controller('appCtrl', function($scope) {
+  app.controller('appCtrl', function($scope,color) {
     $scope.active_tab = "home";
+    $scope.base_color = "#000000";
+    $scope.b_color = "#000000";
+    $scope.t_color = "#ffffff";
     $scope.setTab = function(active_tab){
       $scope.active_tab = active_tab;
     };
+    $scope.changeBaseColor = function(){
+      if(!color.b_color){
+        alert("Please select the base color.");
+        return;
+      }
+      $scope.base_color = color.b_color;
+    }
+    $scope.changeTextColor = function(){
+      if(!color.t_color){
+        alert("Please select the text color.");
+        return;
+      }
+      $scope.text_color = color.t_color;
+    }
   });
   //Directiveの設定
   // app.directive('sampleDirective', function(){
@@ -407,8 +424,29 @@
     //   $('#trainings').append(insert);
     // };
   });
-  app.controller('settingCtrl',function($scope){
+
+  app.factory('color', function () {
+    return { b_color: '',t_color: ''};
+  });
+  app.controller('settingCtrl',function($scope,color){
     $scope.t_list = t_list;
+    $scope.b_color = color.b_color;
+    $scope.$watch('b_color', function(newValue, oldValue, scope) {
+        if(angular.equals(newValue, oldValue)) {
+            console.log('ok');
+        } else {
+            color.b_color=newValue;
+            console.log(color.b_color);
+        }
+    });
+    $scope.$watch('t_color', function(newValue, oldValue, scope) {
+        if(angular.equals(newValue, oldValue)) {
+            console.log('ok');
+        } else {
+            color.t_color=newValue;
+            console.log(color.t_color);
+        }
+    });
     $scope.createTable = function(){
       // console.log("hoge");
       // var t = $scope.selected_t
