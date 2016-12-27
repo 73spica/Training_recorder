@@ -8,7 +8,6 @@
 //http://www.techscore.com/blog/2016/07/15/angularjs-1-5-%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6-angular-2-%E3%81%B8%E3%81%AE%E7%A7%BB%E8%A1%8C%E3%82%92%E6%A5%BD%E3%81%AB%E3%81%97%E3%82%88%E3%81%86%EF%BC%81%EF%BC%81/
 //http://kichipoyo.hatenablog.com/entry/2013/12/01/045519
 //http://www.jiichan.com/programming/programming.php?lang=js&no=10
-//http://www.jiichan.com/programming/programming.php?lang=js&no=10
 
 "use strict";
 (function() {
@@ -42,14 +41,13 @@
   }
   // ==== Using LocalStorage ====
 
-  //Controllerの設定をしています。
   app.controller('appCtrl', function($scope) {
     $scope.active_tab = "home";
     $scope.setTab = function(active_tab){
       $scope.active_tab = active_tab;
     };
   });
-  //Directiveの設定をしています。
+  //Directiveの設定
   // app.directive('sampleDirective', function(){
   //   return {
   //     templateUrl: 'navbar.html'
@@ -412,12 +410,12 @@
   app.controller('settingCtrl',function($scope){
     $scope.t_list = t_list;
     $scope.createTable = function(){
-      console.log("hoge");
-      var t = $scope.selected_t
-      if(!t){
-        alert("please select a kind of training!");
-        return
-      }
+      // console.log("hoge");
+      // var t = $scope.selected_t
+      // if(!t){
+      //   alert("please select a kind of training!");
+      //   return
+      // }
       var table_name = "t_data_table";
       db.transaction(
         function(trans){
@@ -434,19 +432,23 @@
     };
     $scope.removeTable = function(){
       console.log("hoge");
-      var t = $scope.selected_t
-      if(!t){
-        alert("please select a kind of training!");
-        return
-      }
-      var table_name = "t_data_table"
-      db.transaction(
-        function(trans){
-          trans.executeSql(
-            'DROP TABLE '+table_name+';'
-          )
+      var confirm = bootbox.confirm("Are you sure?",function(result) {
+        // OKならtrueに、Cancelならfalseになる
+        console.log(result);
+        if(result){
+          var table_name = "t_data_table"
+            db.transaction(
+              function(trans){
+                trans.executeSql(
+                  'DROP TABLE '+table_name+';'
+                )
+              }
+            )
+        }else{
+          // var i = state.parent().parent().index()
+          // console.log(t[i].t_name);
         }
-      )
+      })
     };
   });
 })();
