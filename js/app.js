@@ -8,15 +8,37 @@
 //http://www.techscore.com/blog/2016/07/15/angularjs-1-5-%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6-angular-2-%E3%81%B8%E3%81%AE%E7%A7%BB%E8%A1%8C%E3%82%92%E6%A5%BD%E3%81%AB%E3%81%97%E3%82%88%E3%81%86%EF%BC%81%EF%BC%81/
 //http://kichipoyo.hatenablog.com/entry/2013/12/01/045519
 //http://www.jiichan.com/programming/programming.php?lang=js&no=10
+//http://work.smarchal.com/twbscolor/
+//http://scene-live.com/page.php?page=49
 
 "use strict";
 (function() {
+  // ==== Using LocalStorage ====
+  function setLS(key,item,obj_flag=0){
+    if(obj_flag==1){
+      item = JSON.stringify(item);
+      localStorage.setItem(key,item);
+    }else{
+      localStorage.setItem(key,item);
+    }
+  }
+  function getLS(key){
+    var item = localStorage.getItem(key);
+    var obj = JSON.parse(item);
+    return obj;
+  }
   // ==== initialize ====
   var app = angular.module('trainingApp', []);
   var dbName = 't-App';
   var version = '1.0';
   var displayName = 't-App';
   var estimatedSize = 65536;
+
+  if (!getLS("training_list")){
+    setLS("training_list",["Push_ups","Plank","Crunch","Side-Crunch","Running","Back_Extension"],1)
+  }
+  var t_list_tmp = getLS("training_list");
+  console.log(t_list_tmp);
   var t_list = ["Push_ups","Plank","Crunch","Side-Crunch","Running","Back_Extension"];
   var db = openDB();
 
@@ -39,13 +61,15 @@
         }
       )
   }
-  // ==== Using LocalStorage ====
 
+  //アプリケーション全体のコントローラ
   app.controller('appCtrl', function($scope,color) {
     $scope.active_tab = "home";
     $scope.base_color = "#000000";
     $scope.b_color = "#000000";
     $scope.t_color = "#ffffff";
+
+    // タブの切り替え
     $scope.setTab = function(active_tab){
       $scope.active_tab = active_tab;
     };
@@ -108,10 +132,15 @@
       // Create label
       var label = []
       var graph_data_dict = {}
+      var graph_data_dict_time = {}
       $.each(t_list,function(index,val){
-        if(val=="Plank" || val=="Running"){
+        if(val=="Plank"){
+	  graph_data_dict_time[val] = []
           return true;
         }
+	if(val=="Running"){
+	  return true;
+	}
         graph_data_dict[val]=[]
       })
       for(var i=1;i<32;i++){
@@ -119,6 +148,9 @@
         $.each(graph_data_dict,function(key){
           graph_data_dict[key].push(0);
         })
+	$.each(graph_data_dict_time,function(key){
+	  graph_data_dict_time[key].push(0)
+	})
       }
       console.log(graph_data_dict)
 
@@ -127,7 +159,19 @@
       $scope.selectSql(sql_state,function(){
         //Create data
         $.each($scope.graph_data_list,function(index,val){
-          graph_data_dict[val.t_name][val.date-1]=val.count;
+	  for(var key in graph_data_dict){
+	    if(key==val.t_name){
+	      graph_data_dict[val.t_name][val.date-1]=val.count;
+	      break
+	    }
+	  }
+	  for(var key in graph_data_dict_time){
+	    if(key==val.t_name){
+	      graph_data_dict_time[val.t_name][val.date-1]=val.count;
+	      break
+	    }
+	  }
+          // graph_data_dict[val.t_name][val.date-1]=val.count;
         })
         console.log($scope.graph_data_list);
         var ctx_push = document.getElementById("myPushChart").getContext("2d");
@@ -135,8 +179,9 @@
         ctx_push.canvas.width = 600;
         ctx_push.canvas.height = 200;
         ctx_crunch.canvas.width = 600;
-        ctx_crunch.canvas.height = 100;
+        ctx_crunch.canvas.height = 200;
         var datasets = []
+	var datasets_for_time = []
         var backgroundColor = [
             'rgba(255, 99, 132, 0.6)',
             'rgba(54, 162, 235, 0.6)',
@@ -163,6 +208,15 @@
           })
           i += 1
         })
+        $.each(graph_data_dict_time,function(key){
+          datasets_for_time.push({
+            label:key,
+            backgroundColor:backgroundColor[i],
+            borderColor:borderColor[i],
+            data: graph_data_dict_time[key],
+          })
+          i += 1
+        })
 
         // var type = "line"
         var type = "bar"
@@ -183,6 +237,10 @@
             //     }
             // ]
         };
+	var crunch_data = {
+	    labels: label,
+	    datasets:datasets_for_time,
+	}
         // var crunch_data = {
         //     labels: label,
         //     datasets: [
@@ -247,19 +305,19 @@
                 }
             }
         });
-        // var myCrunchChart = new Chart(ctx_crunch, {
-        //     type: type,
-        //     data: crunch_data,
-        //     options: {
-        //         scales: {
-        //             yAxes: [{
-        //                 ticks: {
-        //                     beginAtZero:true
-        //                 }
-        //             }]
-        //         }
-        //     }
-        // });
+        var myCrunchChart = new Chart(ctx_crunch, {
+            type: type,
+            data: crunch_data,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
       });
     }
   });
@@ -382,6 +440,7 @@
     $(document).on("click",".updateData",function(){
       var state = $(this)
       var add_count = Number(state.parent().parent().children().eq(3).children(".add").val())
+      state.parent().parent().children().eq(3).children(".add").val(null)
       if(!add_count){
         alert("please input add_count.");
         return
@@ -447,6 +506,11 @@
             console.log(color.t_color);
         }
     });
+    $scope.addTraining = function(){
+      t_list.push($scope.add_train);
+      setLS("training_list",t_list,1);
+      $scope.add_train = "";
+    }
     $scope.createTable = function(){
       // console.log("hoge");
       // var t = $scope.selected_t
