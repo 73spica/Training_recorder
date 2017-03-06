@@ -103,7 +103,15 @@
   //   };
   // });
 
+  // グラフ表示関連のコントローラ
   app.controller('graphCtrl',function($scope){
+
+    /**
+     * select文実行用の関数
+     * sql_state : sql文
+     * callback  : 取得したデータを使った処理
+     * TODO : 上ので書き直す
+     */
     $scope.selectSql = function(sql_state,callback){
       var items = new Array();
 
@@ -127,7 +135,12 @@
       )
       //
     };
+
+    /**
+     * グラフ描画用の関数
+     */
     $scope.showGraph = function(){
+      // グラフ表示前に日付の入力を確認
       if(!$scope.graph_date){
         alert("please input a date!");
         return
