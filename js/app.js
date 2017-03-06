@@ -33,22 +33,23 @@
   var version = '1.0';
   var displayName = 't-App';
   var estimatedSize = 65536;
+  var t_list = ["Push_ups","Plank","Crunch","Side-Crunch","Running","Back_Extension"];
 
+  // ローカルストレージにトレーニングメニューを保存して置く
+  // training_listがまだ無かったらデフォルトのトレーニングメニューを入れておく．
   if (!getLS("training_list")){
     setLS("training_list",["Push_ups","Plank","Crunch","Side-Crunch","Running","Back_Extension"],1)
   }
-  var t_list_tmp = getLS("training_list");
-  console.log(t_list_tmp);
-  var t_list = ["Push_ups","Plank","Crunch","Side-Crunch","Running","Back_Extension"];
-  var db = openDB();
-
+  
+  var db = openDB(); // WebSQLを使うためのDB接続処理
   // ==== Web SQL ====
   function openDB(){
     return openDatabase(dbName, version, displayName, estimatedSize);
   }
 
+
   //sql文の実行
-  //最初に色々書いたところもこれ使いたい
+  // TODO:最初に色々書いたところもこれ使いたい
   function do_sql(sql_state,callback=0){
     db.transaction(
         function(trans){
@@ -64,6 +65,8 @@
 
   //アプリケーション全体のコントローラ
   app.controller('appCtrl', function($scope,color) {
+    // 後々UIの色を変えられるようにしたい
+    // そのための初期値
     $scope.active_tab = "home";
     $scope.base_color = "#000000";
     $scope.b_color = "#000000";
@@ -73,6 +76,8 @@
     $scope.setTab = function(active_tab){
       $scope.active_tab = active_tab;
     };
+
+    // ベースカラーの変更
     $scope.changeBaseColor = function(){
       if(!color.b_color){
         alert("Please select the base color.");
@@ -80,6 +85,8 @@
       }
       $scope.base_color = color.b_color;
     }
+
+    // テキストカラーの変更
     $scope.changeTextColor = function(){
       if(!color.t_color){
         alert("Please select the text color.");
@@ -88,6 +95,7 @@
       $scope.text_color = color.t_color;
     }
   });
+
   //Directiveの設定
   // app.directive('sampleDirective', function(){
   //   return {
