@@ -145,15 +145,16 @@
         alert("please input a date!");
         return
       }
-      var table_name = "t_data_table"
-      var year = $scope.graph_date.getFullYear()
-      var month = $scope.graph_date.getMonth()+1
+      var table_name = "t_data_table" //テーブル名
+      var year = $scope.graph_date.getFullYear() // 入力された年
+      var month = $scope.graph_date.getMonth()+1 // 入力された月
       var sql_state = 'SELECT t_name,count,date FROM '+table_name+ ' WHERE year='+year+' AND month='+month+';'
 
       // Create label
-      var label = []
-      var graph_data_dict = {}
-      var graph_data_dict_time = {}
+      // 秒・回数・距離系の3種類くらいでデータ分けたい
+      var label = [] // グラフのラベルとしてトレーニング名が入る
+      var graph_data_dict = {} // 回数系のデータ
+      var graph_data_dict_time = {} // 秒数系のデータ
       $.each(t_list,function(index,val){
         if(val=="Plank"){
 	  graph_data_dict_time[val] = []
