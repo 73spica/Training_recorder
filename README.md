@@ -1,5 +1,6 @@
 # Training_recorder
 _Creating now_
+バグなう
 
 ## About
 * This is Simple Recording tool for athletic trainings.
